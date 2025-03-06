@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cribl_workers_deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: cribl_worker
+  template:
+    metadata:
+      labels:
+        app: cribl_worker
+    spec:
+      containers:
+      - name: cribl_worker_container
+        image: workerscribl/cribl:latest
+        env:
+        - name: Mode
+          value: CRIBL_DIST_MODE=worker
+        - name: MasterToken
+          value: CRIBL_DIST_LEADER_URL=tcp://INSERT_TOKEN@master:4200
+        ports:
+        - containerPort: 9000
